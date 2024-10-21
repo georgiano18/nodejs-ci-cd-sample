@@ -1,0 +1,7 @@
+*.log
+.DS_Store
+.aws/
+.cache/
+Documents/*
+Downloads/
+
