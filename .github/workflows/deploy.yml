@@ -21,14 +21,6 @@ jobs:
           echo "${{ secrets.MY_EC2_KEY }}" > ~/.ssh/private_key.pem
           chmod 600 ~/.ssh/private_key.pem
 
-      - name: Set up SSH config
-        run: |
-          echo "Host ec2" >> ~/.ssh/config
-          echo "  HostName YOUR_EC2_IP_ADDRESS" >> ~/.ssh/config
-          echo "  User ec2-user" >> ~/.ssh/config
-          echo "  IdentityFile ~/.ssh/private_key.pem" >> ~/.ssh/config
-          chmod 600 ~/.ssh/config
-
       - name: Deploy to EC2
         run: |
           scp -o StrictHostKeyChecking=no -i ~/.ssh/private_key.pem -r ./MY-URL ec2-user@98.83.25.31:/var/www/html
