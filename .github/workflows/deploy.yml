@@ -11,16 +11,24 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3  # Update this line
+        uses: actions/checkout@v2.4.0  # Use a stable version
 
-      - name: Copy files to EC2
-        env:
-          EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+      - name: Create SSH Directory
+        run: mkdir -p ~/.ssh
+
+      - name: Set up SSH key
         run: |
-          echo "${{ secrets.EC2_SSH_KEY }}" > private_key.pem
-          chmod 600 private_key.pem
-          # Disable host key checking
-          echo "Host *" > ~/.ssh/config
-          echo "StrictHostKeyChecking no" >> ~/.ssh/config
-          scp -i private_key.pem -r ./MY-URL/* ec2-user@13.51.79.56:/var/www/html
-          rm private_key.pem
+          echo "${{ secrets.MY_EC2_KEY }}" > ~/.ssh/private_key.pem
+          chmod 600 ~/.ssh/private_key.pem
+
+      - name: Set up SSH config
+        run: |
+          echo "Host ec2" >> ~/.ssh/config
+          echo "  HostName YOUR_EC2_IP_ADDRESS" >> ~/.ssh/config
+          echo "  User ec2-user" >> ~/.ssh/config
+          echo "  IdentityFile ~/.ssh/private_key.pem" >> ~/.ssh/config
+          chmod 600 ~/.ssh/config
+
+      - name: Deploy to EC2
+        run: |
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/private_key.pem -r ./MY-URL ec2-user@98.83.25.31:/var/www/html
