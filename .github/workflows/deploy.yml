@@ -22,7 +22,7 @@ jobs:
           # Disable host key checking
           echo "Host *" > ~/.ssh/config
           echo "StrictHostKeyChecking no" >> ~/.ssh/config
-          scp -i private_key.pem -r ./MY-URL/* 
-ec2-user@13.51.79.56:/var/www/html
+          scp -i private_key.pem -r ./MY-URL/* ec2-user@13.51.79.56:/var/www/html
           rm private_key.pem
+
 
