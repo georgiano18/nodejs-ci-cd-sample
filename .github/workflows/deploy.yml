@@ -3,7 +3,7 @@ name: Deploy to EC2
 on:
   push:
     branches:
-      - master
+      - master  
 
 jobs:
   deploy:
@@ -11,19 +11,21 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
-      - name: List workspace contents
-        run: ls -la
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 'v18.19.1'  
 
-      - name: Create SSH Directory
-        run: mkdir -p ~/.ssh
+      - name: Install dependencies
+        run: npm install
 
-      - name: Set up SSH key
-        run: |
-          echo "${{ secrets.MY_EC2_KEY }}" > ~/.ssh/private_key.pem
-          chmod 600 ~/.ssh/private_key.pem
-
-      - name: Deploy to EC2
-        run: |
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/private_key.pem -r ./nodejs-ci-cd-sample ubuntu@3.88.218.33:/var/www/html
+      - name: Copy files to EC2
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: 'ubuntu'
+          key: ${{ secrets.MY_EC2_KEY }}  
+          source: "."
+          target: "/var/www/html/nodejs-ci-cd-sample"
