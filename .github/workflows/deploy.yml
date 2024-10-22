@@ -29,5 +29,5 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: 'ubuntu'
           key: ${{ secrets.MY_EC2_KEY }}
-          source: "."  
+          source: "nodejs-ci-cd-sample/*"  
           target: "/var/www/html/nodejs-ci-cd-sample"
