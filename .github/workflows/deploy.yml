@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2.4.0  # Use a stable version
+        uses: actions/checkout@v3
 
       - name: Create SSH Directory
         run: mkdir -p ~/.ssh
@@ -23,4 +23,4 @@ jobs:
 
       - name: Deploy to EC2
         run: |
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/private_key.pem -r ./MY-URL ec2-user@98.83.25.31:/var/www/html
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/private_key.pem -r ./MY-URL ubuntu@3.88.218.33:/var/www/html
